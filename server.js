@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 // Notice: Our scraping tools are prepared, too
-var request = require('request'); 
+var request = require('request');
 var cheerio = require('cheerio');
 
 // use morgan and bodyparser with our app
@@ -23,7 +23,8 @@ app.use(express.static('public'));
 
 
 // Database configuration with mongoose
-mongoose.connect('mongodb://localhost/week18day3mongoose');
+// mongoose.connect('mongodb://localhost/week18day3mongoose');
+mongoose.connect('mongodb://test:test217@ds061721.mlab.com:61721/heroku_d103gdp1');
 var db = mongoose.connection;
 
 // show any mongoose errors
@@ -62,7 +63,7 @@ app.get('/scrape', function(req, res) {
     		// save an empty result object
 				var result = {};
 
-				// add the text and href of every link, 
+				// add the text and href of every link,
 				// and save them as properties of the result obj
 				result.title = $(this).children('a').text();
 				result.link = $(this).children('a').attr('href');
@@ -77,7 +78,7 @@ app.get('/scrape', function(req, res) {
 					// log any errors
 				  if (err) {
 				    console.log(err);
-				  } 
+				  }
 				  // or log the doc
 				  else {
 				    console.log(doc);
@@ -98,7 +99,7 @@ app.get('/articles', function(req, res){
 		// log any errors
 		if (err){
 			console.log(err);
-		} 
+		}
 		// or send the doc to the browser as a json object
 		else {
 			res.json(doc);
@@ -108,7 +109,7 @@ app.get('/articles', function(req, res){
 
 // grab an article by it;s ObjectId
 app.get('/articles/:id', function(req, res){
-	// using the id passed in the id parameter, 
+	// using the id passed in the id parameter,
 	// prepare a query that finds the matching one in our db...
 	Article.findOne({'_id': req.params.id})
 	// and populate all of the notes associated with it.
@@ -118,7 +119,7 @@ app.get('/articles/:id', function(req, res){
 		// log any errors
 		if (err){
 			console.log(err);
-		} 
+		}
 		// otherwise, send the doc to the browser as a json object
 		else {
 			res.json(doc);
@@ -138,10 +139,10 @@ app.post('/articles/:id', function(req, res){
 		// log any errors
 		if(err){
 			console.log(err);
-		} 
+		}
 		// otherwise
 		else {
-			// using the Article id passed in the id parameter of our url, 
+			// using the Article id passed in the id parameter of our url,
 			// prepare a query that finds the matching Article in our db
 			// and update it to make it's lone note the one we just saved
 			Article.findOneAndUpdate({'_id': req.params.id}, {'note':doc._id})
