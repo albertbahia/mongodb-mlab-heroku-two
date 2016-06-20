@@ -21,10 +21,16 @@ app.use(bodyParser.urlencoded({
 // make public a static dir
 app.use(express.static('public'));
 
-
 // Database configuration with mongoose
-// mongoose.connect('mongodb://localhost/week18day3mongoose');
-mongoose.connect('mongodb://test:test217@ds061721.mlab.com:61721/heroku_d103gdp1');
+var databaseUri = 'mongodb://localhost/week18day3mongoose';
+var mlabDatabaseUri ='mongodb://test:test217@ds061721.mlab.com:61721/heroku_d103gdp1';
+if (process.env.MONGODB_URI) {
+  console.log('THIS IS THE HEROKU MONGODB URI =====> ' + process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect(databaseUri);
+}
+
 var db = mongoose.connection;
 
 // show any mongoose errors
